@@ -1,0 +1,30 @@
+<mat-card>
+  <mat-card-title>Executar Prompt</mat-card-title>
+  <mat-card-content>
+    <form class="execute-form" (ngSubmit)="onExecute()">
+      <ng-container *ngFor="let v of prompt.variables">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ v }}</mat-label>
+          <input matInput [(ngModel)]="variableValues[v]" [name]="v" required />
+        </mat-form-field>
+      </ng-container>
+
+      <button mat-raised-button color="primary" type="submit">
+        <mat-icon>play_arrow</mat-icon> Executar
+      </button>
+    </form>
+
+    <mat-card *ngIf="output" class="result-card">
+      <mat-card-header>
+        <mat-card-title>Resultado</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ output }}</p>
+        <p class="meta">
+          <mat-icon>timer</mat-icon> {{ latency_ms }} ms
+          <mat-icon>attach_money</mat-icon> {{ cost | number : "1.4-4" }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </mat-card-content>
+</mat-card>
