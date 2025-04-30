@@ -1,0 +1,20 @@
+.execute-form {
+  display: grid;
+  gap: 1rem;
+
+  button {
+    width: 160px;
+  }
+}
+
+.result-card {
+  margin-top: 1rem;
+  .meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+}

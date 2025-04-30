@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-title>Métricas do Prompt</mat-card-title>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item>
+        <mat-icon matListIcon>list</mat-icon>
+        <h4 matLine>Total de Execuções</h4>
+        <p matLine>{{ metrics.total_executions }}</p>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon matListIcon>timer</mat-icon>
+        <h4 matLine>Latência Média</h4>
+        <p matLine>{{ metrics.avg_latency_ms }} ms</p>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon matListIcon>attach_money</mat-icon>
+        <h4 matLine>Custo Médio</h4>
+        <p matLine>${{ metrics.avg_cost | number : "1.4-4" }}</p>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
