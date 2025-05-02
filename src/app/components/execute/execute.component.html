@@ -1,30 +1,53 @@
-<mat-card>
-  <mat-card-title>Executar Prompt</mat-card-title>
-  <mat-card-content>
-    <form class="execute-form" (ngSubmit)="onExecute()">
-      <ng-container *ngFor="let v of prompt.variables">
-        <mat-form-field appearance="outline">
-          <mat-label>{{ v }}</mat-label>
-          <input matInput [(ngModel)]="variableValues[v]" [name]="v" required />
+<mat-card class="execute-card">
+    <mat-card-header>
+      <mat-card-title>Execute Prompt</mat-card-title>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Input Text</mat-label>
+          <textarea
+            matInput
+            [(ngModel)]="inputText"
+            name="inputText"
+            rows="4"
+            placeholder="Digite seu texto aqui..."
+            required
+          ></textarea>
         </mat-form-field>
-      </ng-container>
-
-      <button mat-raised-button color="primary" type="submit">
-        <mat-icon>play_arrow</mat-icon> Executar
-      </button>
-    </form>
-
-    <mat-card *ngIf="output" class="result-card">
-      <mat-card-header>
-        <mat-card-title>Resultado</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
+  
+        <div class="vars" *ngIf="variableKeys.length">
+          <h3>Variables</h3>
+          <div *ngFor="let key of variableKeys" class="var-field">
+            <mat-form-field appearance="fill" class="var-input">
+              <mat-label>{{ key }}</mat-label>
+              <input
+                matInput
+                [(ngModel)]="variables[key]"
+                [name]="key"
+                placeholder="Valor de {{ key }}"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+  
+        <button
+          mat-flat-button
+          color="primary"
+          class="full-width"
+          type="submit"
+        >
+          <mat-icon>play_arrow</mat-icon>
+          Execute
+        </button>
+      </form>
+  
+      <div *ngIf="output !== null" class="result">
+        <h3>Result</h3>
         <p>{{ output }}</p>
-        <p class="meta">
-          <mat-icon>timer</mat-icon> {{ latency_ms }} ms
-          <mat-icon>attach_money</mat-icon> {{ cost | number : "1.4-4" }}
-        </p>
-      </mat-card-content>
-    </mat-card>
-  </mat-card-content>
-</mat-card>
+        <small>Latency: {{ latency_ms }} ms | Cost: {{ cost }}</small>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

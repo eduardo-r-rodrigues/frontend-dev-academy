@@ -1,0 +1,43 @@
+.settings-card {
+  width: 80%;
+  max-width: 800px;
+  margin: 24px auto;
+  padding: 24px;
+  background: #1e1e1e;
+  color: #fff;
+  border-radius: 8px;
+
+  mat-card-title {
+    color: #fff;
+    font-size: 1.5rem;
+  }
+
+  mat-card-content {
+    .api-field {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+
+      mat-form-field {
+        flex: 1;
+      }
+
+      button[mat-stroked-button] {
+        min-width: 90px;
+        height: 56px;            
+        border-radius: 8px;      
+        background: #000;
+        color: #fff;
+        text-transform: none;    
+        align-self: center;
+      }
+    }
+  }
+}
+
+.settings-subtitle {
+  color: #ccc;
+  margin: 8px 0 24px;
+  font-size: 0.9rem;
+}

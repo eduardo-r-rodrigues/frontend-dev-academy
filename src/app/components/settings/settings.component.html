@@ -1,0 +1,67 @@
+<mat-card class="settings-card">
+  <mat-card-header>
+    <mat-card-title>API Settings</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+
+    <p class="settings-subtitle">
+      Configure your AI model provider API keys
+    </p>
+
+    <div class="api-field">
+      <mat-form-field appearance="fill">
+        <mat-label>OpenAI API Key</mat-label>
+        <input
+          matInput
+          [type]="hideOpenai ? 'password' : 'text'"
+          [(ngModel)]="openaiKey"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="toggleOpenaiVisibility()"
+          aria-label="Toggle OpenAI key visibility"
+        >
+          <mat-icon>{{ hideOpenai ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="saveOpenaiKey()"
+      >
+        Update
+      </button>
+    </div>
+
+    <div class="api-field">
+      <mat-form-field appearance="fill">
+        <mat-label>Gemini API Key</mat-label>
+        <input
+          matInput
+          [type]="hideGemini ? 'password' : 'text'"
+          [(ngModel)]="geminiKey"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="toggleGeminiVisibility()"
+          aria-label="Toggle Gemini key visibility"
+        >
+          <mat-icon>{{ hideGemini ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="saveGeminiKey()"
+      >
+        Update
+      </button>
+    </div>
+
+  </mat-card-content>
+</mat-card>
