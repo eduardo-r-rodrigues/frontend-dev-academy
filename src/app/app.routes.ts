@@ -1,13 +1,18 @@
 import { Routes } from '@angular/router';
-import { PromptListComponent } from './components/prompt-list/prompt-list.component';
-import { PromptFormComponent } from './components/prompt-form/prompt-form.component';
-import { ExecuteComponent } from './components/execute/execute.component';
-import { MetricsComponent } from './components/metrics/metrics.component';
+
+// aponte pros arquivos corretos
+import { DashboardComponent }     from './components/dashboard/dashboard.component';
+import { PromptEditorComponent }  from './components/editor/prompt-editor.component';
+import { ExecuteComponent }       from './components/execute/execute.component';
+import { SettingsComponent }      from './components/settings/settings.component';
 
 export const routes: Routes = [
-  { path: '',        redirectTo: 'prompts', pathMatch: 'full' },
-  { path: 'prompts', component: PromptListComponent },
-  { path: 'prompts/new',   component: PromptFormComponent },
-  { path: 'execute/:id',   component: ExecuteComponent },
-  { path: 'metrics/:id',   component: MetricsComponent },
+  { path: '',            redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'dashboard',   component: DashboardComponent },
+  { path: 'prompts/new', component: PromptEditorComponent },
+  { path: 'execute/:id', component: ExecuteComponent },
+  { path: 'settings',    component: SettingsComponent },
+  // { path: 'metrics/:id', component: MetricsComponent }, // se voltar a usar later
+  { path: '**',          redirectTo: 'dashboard' },
 ];
+  

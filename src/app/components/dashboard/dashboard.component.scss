@@ -1,0 +1,71 @@
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 24px;
+}
+
+.dashboard-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 360px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  color: #222222; /* texto bem escuro */
+}
+
+mat-card-header {
+  padding-bottom: 0;
+}
+
+mat-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111111;
+}
+
+mat-card-subtitle {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.875rem;
+  color: #555555; /* subtítulo mais escuro */
+}
+
+mat-card-content {
+  flex-grow: 1;
+}
+
+.badges {
+  margin: 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
+  display: inline-block;
+  background: #e0e0e0;      // fundo cinza claro
+  color: #000000;           // texto preto
+  padding: 4px 12px;        // espaçamento
+  border-radius: 16px;      // cantos arredondados
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 0;
+}
+
+button[mat-flat-button] {
+  min-width: 120px;
+}
+
+button[mat-stroked-button] {
+  min-width: 120px;
+}

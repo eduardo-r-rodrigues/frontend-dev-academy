@@ -1,0 +1,84 @@
+<div class="prompt-editor-container">
+  <div class="editor-header">
+    <h2>New Prompt</h2>
+    <button mat-flat-button color="primary" (click)="onSubmit()">
+      <mat-icon>save</mat-icon>
+      Save Prompt
+    </button>
+  </div>
+
+  <div class="editor-content">
+    <mat-card class="editor-card main-form">
+      <mat-card-content>
+        <form [formGroup]="form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Prompt Title</mat-label>
+            <input
+              matInput
+              formControlName="title"
+              placeholder="Enter a descriptive title"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Prompt Content</mat-label>
+            <textarea
+              matInput
+              formControlName="content"
+              rows="8"
+              placeholder="Write your prompt here..."
+            ></textarea>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="side-panel">
+      <!-- Tags -->
+      <mat-card class="editor-card settings-card">
+        <mat-card-header>
+          <mat-card-title>Tags</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="tags-input">
+            <mat-form-field appearance="outline" class="tag-field">
+              <mat-label>Add a tag</mat-label>
+              <input
+                matInput
+                [(ngModel)]="newTag"
+                placeholder="New tag"
+                (keyup.enter)="addTag()"
+              />
+            </mat-form-field>
+            <button mat-icon-button color="primary" (click)="addTag()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+
+          <div class="tags-list">
+            <span class="tag" *ngFor="let t of tags">
+              {{ t }}
+              <button class="remove" (click)="removeTag(t)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Modelos compatíveis -->
+      <mat-card class="editor-card settings-card">
+        <mat-card-header>
+          <mat-card-title>Compatible Models</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-selection-list formControlName="models">
+            <mat-list-option *ngFor="let m of availableModels" [value]="m">
+              {{ m }}
+            </mat-list-option>
+          </mat-selection-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

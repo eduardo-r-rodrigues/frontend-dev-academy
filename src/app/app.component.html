@@ -1,14 +1,24 @@
 <mat-toolbar color="primary">
-  <span>Roteamento de IA</span>
+  <button mat-icon-button routerLink="/dashboard" class="nav-btn">
+    <mat-icon>home</mat-icon>
+  </button>
+
+  <span class="app-title">PromptHub</span>
+
   <span class="spacer"></span>
-  <button mat-button routerLink="/prompts" routerLinkActive="active">Prompts</button>
-  <button mat-button routerLink="/prompts/new" routerLinkActive="active">Novo Prompt</button>
+
+  <button mat-button routerLink="/dashboard" class="nav-btn">
+    <mat-icon>dashboard</mat-icon>
+    Dashboard
+  </button>
+  <button mat-button routerLink="/prompts/new" class="nav-btn">
+    <mat-icon>add</mat-icon>
+    New Prompt
+  </button>
+  <button mat-button routerLink="/settings" class="nav-btn">
+    <mat-icon>settings</mat-icon>
+    Settings
+  </button>
 </mat-toolbar>
 
-<main class="content">
-  <router-outlet></router-outlet>
-</main>
-
-<mat-toolbar color="primary" class="footer">
-  <span>&copy; 2025 Dev Academy</span>
-</mat-toolbar>
+<router-outlet></router-outlet>

@@ -1,0 +1,33 @@
+<div class="dashboard-container">
+  <mat-card *ngFor="let p of recentPrompts" class="dashboard-card">
+    <mat-card-header>
+      <mat-card-title>{{ p.title }}</mat-card-title>
+      <mat-card-subtitle>
+        {{ p.model }} • Last used {{ p.lastUsed }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="badges">
+        <span class="badge" *ngFor="let c of p.categories">
+          {{ c }}
+        </span>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-flat-button color="primary" [routerLink]="['/execute', p.id]">
+        <mat-icon>play_arrow</mat-icon>
+        Execute
+      </button>
+      <button
+        mat-stroked-button
+        color="accent"
+        [routerLink]="['/metrics', p.id]"
+      >
+        <mat-icon>bar_chart</mat-icon>
+        Metrics
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
