@@ -10,9 +10,12 @@
     h2 {
       margin: 0;
       font-size: 1.75rem;
+      color: #ffffff;
     }
     button {
       height: 40px;
+      background: #1e1e1e;
+      color: #ffffff;
     }
   }
 
@@ -23,6 +26,7 @@
     .main-form {
       flex: 2;
     }
+
     .side-panel {
       flex: 1;
       display: flex;
@@ -32,46 +36,64 @@
   }
 
   .editor-card {
+    background: #1e1e1e;
+    color: #ffffff;
+    border-radius: 8px;
+
     &.main-form {
       mat-card-content form {
         display: flex;
         flex-direction: column;
         gap: 16px;
+
+        mat-form-field {
+          background: #2a2a2a;
+          border-radius: 4px;
+        }
       }
     }
 
     &.settings-card {
+      mat-card-title {
+        color: #ffffff;
+      }
+
       .tags-input {
         display: flex;
         align-items: center;
         gap: 8px;
         margin-bottom: 12px;
+
+        mat-form-field {
+          background: #2a2a2a;
+          border-radius: 4px;
+        }
+
+        input {
+          color: #ffffff;
+        }
       }
-      mat-card-title {
-        color: #ffffff;
-      }
+
       .tags-list {
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
 
         .tag {
-          background: #e0e0e0;
-          color: #000000;
+          background: #333333;
+          color: #ffffff;
           padding: 4px 8px;
           border-radius: 12px;
-          display: inline-flex;
-          align-items: center;
-          gap: 4px;
+        }
+      }
 
-          .remove {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            display: flex;
-            align-items: center;
-          }
+      mat-selection-list {
+        background: #2a2a2a;
+        border-radius: 4px;
+        padding: 8px;
+
+        mat-list-option {
+          color: #ffffff;
         }
       }
     }
