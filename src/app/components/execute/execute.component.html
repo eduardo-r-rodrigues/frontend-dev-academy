@@ -1,53 +1,72 @@
 <mat-card class="execute-card">
-    <mat-card-header>
-      <mat-card-title>Execute Prompt</mat-card-title>
-    </mat-card-header>
-  
-    <mat-card-content>
-      <form (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Input Text</mat-label>
-          <textarea
-            matInput
-            [(ngModel)]="inputText"
-            name="inputText"
-            rows="4"
-            placeholder="Digite seu texto aqui..."
-            required
-          ></textarea>
-        </mat-form-field>
-  
-        <div class="vars" *ngIf="variableKeys.length">
-          <h3>Variables</h3>
-          <div *ngFor="let key of variableKeys" class="var-field">
-            <mat-form-field appearance="fill" class="var-input">
-              <mat-label>{{ key }}</mat-label>
-              <input
-                matInput
-                [(ngModel)]="variables[key]"
-                [name]="key"
-                placeholder="Valor de {{ key }}"
-              />
-            </mat-form-field>
-          </div>
+  <mat-card-header>
+    <mat-card-title>Execute Prompt: {{ promptName }}</mat-card-title>
+    <mat-card-subtitle>Model: {{ iaModel }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Loading Indicator -->
+    <div class="loading-container" *ngIf="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Processing...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-container" *ngIf="error">
+      <p class="error-message">{{ error }}</p>
+    </div>
+
+    <!-- Execution Form -->
+    <form (ngSubmit)="onSubmit()" *ngIf="!loading">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Input Text</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="inputText"
+          name="inputText"
+          rows="4"
+          placeholder="Enter your text here..."
+          required
+        ></textarea>
+      </mat-form-field>
+
+      <div class="vars" *ngIf="variableKeys.length">
+        <h3>Variables</h3>
+        <div *ngFor="let key of variableKeys" class="var-field">
+          <mat-form-field appearance="fill" class="var-input">
+            <mat-label>{{ key }}</mat-label>
+            <input
+              matInput
+              [(ngModel)]="variables[key]"
+              [name]="key"
+              placeholder="Value for {{ key }}"
+            />
+          </mat-form-field>
         </div>
-  
-        <button
-          mat-flat-button
-          color="primary"
-          class="full-width"
-          type="submit"
-        >
-          <mat-icon>play_arrow</mat-icon>
-          Execute
-        </button>
-      </form>
-  
-      <div *ngIf="output !== null" class="result">
-        <h3>Result</h3>
-        <p>{{ output }}</p>
-        <small>Latency: {{ latency_ms }} ms | Cost: {{ cost }}</small>
       </div>
-    </mat-card-content>
-  </mat-card>
-  
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="full-width submit-btn"
+        type="submit"
+        [disabled]="loading"
+      >
+        <mat-icon>play_arrow</mat-icon>
+        Execute
+      </button>
+    </form>
+
+    <!-- Result Section -->
+    <div *ngIf="output !== null" class="result">
+      <h3>Result</h3>
+      <div class="output-container">
+        <p class="output-text">{{ output }}</p>
+      </div>
+      <div class="metrics">
+        <span class="metric">Latency: {{ latency_ms }} ms</span>
+        <span class="metric">Cost: ${{ cost }}</span>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
