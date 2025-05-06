@@ -1,33 +1,52 @@
-<div class="dashboard-container">
-  <mat-card *ngFor="let p of recentPrompts" class="dashboard-card">
-    <mat-card-header>
-      <mat-card-title>{{ p.title }}</mat-card-title>
-      <mat-card-subtitle>
-        {{ p.model }} • Last used {{ p.lastUsed }}
-      </mat-card-subtitle>
-    </mat-card-header>
+<ng-container *ngIf="loading; else loaded">
+  <p class="center-text">Loading prompts…</p>
+</ng-container>
 
-    <mat-card-content>
-      <div class="badges">
-        <span class="badge" *ngFor="let c of p.categories">
-          {{ c }}
-        </span>
+<ng-template #loaded>
+  <ng-container *ngIf="error; else withData">
+    <p class="center-text error">{{ error }}</p>
+  </ng-container>
+  <ng-template #withData>
+    <ng-container *ngIf="prompts.length > 0; else empty">
+      <div class="dashboard-container">
+        <mat-card *ngFor="let p of prompts" class="dashboard-card">
+          <mat-card-header>
+            <mat-card-title>{{ p.name }}</mat-card-title>
+            <mat-card-subtitle>{{ p.ia_model }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="badges">
+              <span class="badge" *ngFor="let v of p.variables">
+                {{ v }}
+              </span>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-flat-button color="primary" (click)="executePrompt(p.id)">
+              <mat-icon>play_arrow</mat-icon>
+              Execute
+            </button>
+            <button mat-stroked-button color="accent" (click)="viewMetrics(p.id)">
+              <mat-icon>bar_chart</mat-icon>
+              Metrics
+            </button>
+            <button mat-flat-button class="edit-btn" (click)="editPrompt(p.id)">
+              <mat-icon>edit</mat-icon>
+              Edit
+            </button>
+            <button mat-stroked-button class="delete-btn" (click)="deletePrompt(p.id)">
+              <mat-icon>delete</mat-icon>
+              Delete
+            </button>
+          </mat-card-actions>
+        </mat-card>
       </div>
-    </mat-card-content>
+    </ng-container>
 
-    <mat-card-actions>
-      <button mat-flat-button color="primary" [routerLink]="['/execute', p.id]">
-        <mat-icon>play_arrow</mat-icon>
-        Execute
-      </button>
-      <button
-        mat-stroked-button
-        color="accent"
-        [routerLink]="['/metrics', p.id]"
-      >
-        <mat-icon>bar_chart</mat-icon>
-        Metrics
-      </button>
-    </mat-card-actions>
-  </mat-card>
-</div>
+    <ng-template #empty>
+      <p class="center-text">No prompts yet. Create your first prompt!</p>
+    </ng-template>
+  </ng-template>
+</ng-template>

@@ -1,6 +1,6 @@
 .dashboard-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(470px, 1fr));
   gap: 24px;
   padding: 24px;
 }
@@ -8,70 +8,89 @@
 .dashboard-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 360px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   background: #1e1e1e;
-  color: #ffffff;
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  height: 350px;
 
   mat-card-header {
     padding-bottom: 0;
   }
-
   mat-card-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #ffffff;
   }
-
   mat-card-subtitle {
-    display: block;
     margin-top: 4px;
     font-size: 0.875rem;
-    color: #cccccc;
+    color: #ccc;
   }
 
   mat-card-content {
     flex-grow: 1;
-  }
-
-  .badges {
-    margin: 16px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .badge {
-    display: inline-block;
-    background: #333333;
-    color: #ffffff;
-    padding: 4px 12px;
-    border-radius: 16px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0;
+      .badge {
+        background: #333;
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+    }
   }
 
   mat-card-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
-    padding-top: 0;
-  }
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    margin-top: auto;
 
-  button[mat-flat-button] {
-    min-width: 120px;
-    background: #ffffff;
-    color: #000000;
-    text-transform: none;
-  }
+    /* Execute & Edit */
+    button[mat-flat-button] {
+      min-width: 120px;
+      background: #fff;
+      color: #000;
+      text-transform: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
 
-  button[mat-stroked-button] {
-    min-width: 120px;
-    border-color: #ffffff;
-    color: #ffffff;
-    background: transparent;
-    text-transform: none;
+    /* Metrics & Delete */
+    button[mat-stroked-button] {
+      min-width: 120px;
+      border-color: #fff;
+      color: #fff;
+      background: transparent;
+      text-transform: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Hover vermelho no delete */
+    .delete-btn:hover {
+      background: #e53935 !important;
+      color: #fff !important;
+      border-color: #e53935 !important;
+    }
   }
+}
+
+.center-text {
+  text-align: center;
+  margin: 48px 0;
+  color: #ccc;
+}
+
+.error {
+  color: #f44336;
 }
