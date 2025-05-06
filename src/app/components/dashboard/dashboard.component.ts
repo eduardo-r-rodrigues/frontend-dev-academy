@@ -65,7 +65,6 @@ export class DashboardComponent implements OnInit {
   executePrompt(id: string) {
     this.router.navigate(['/execute', id]);
   }
-
   viewMetrics(id: string) {
     this.router.navigate(['/metrics', id]);
   }
@@ -79,4 +78,5 @@ export class DashboardComponent implements OnInit {
       this.prompts = this.prompts.filter((p) => p.id !== id);
     });
   }
+
 }

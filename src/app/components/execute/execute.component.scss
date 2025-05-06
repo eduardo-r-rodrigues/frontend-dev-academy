@@ -1,34 +1,115 @@
 .execute-card {
-  max-width: 600px;
+  max-width: 800px;
   margin: 24px auto;
   padding: 16px;
-  background: #fafafa;
+  background: #1e1e1e;
+  color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  mat-card-title {
+    color: #ffffff;
+    font-size: 1.5rem;
+  }
+
+  mat-card-subtitle {
+    color: #bbbbbb;
+  }
 }
 
 .full-width {
   width: 100%;
 }
 
-.vars {
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  
+  p {
+    margin-top: 16px;
+    color: #bbbbbb;
+  }
+}
+
+.error-container {
+  padding: 16px;
+  background: rgba(244, 67, 54, 0.1);
+  border-left: 4px solid #f44336;
   margin: 16px 0;
+  border-radius: 4px;
+  
+  .error-message {
+    color: #f44336;
+    margin: 0;
+  }
+}
+
+.vars {
+  margin: 24px 0;
+  
+  h3 {
+    margin-bottom: 16px;
+    color: #bbbbbb;
+  }
 }
 
 .var-field {
   display: flex;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .var-input {
   flex: 1;
+  background: #2a2a2a;
+  border-radius: 4px;
 }
 
-.run-btn {
+.submit-btn {
   margin-top: 16px;
+  height: 48px;
+  background: #4caf50;
+  color: white;
+  
+  &:hover {
+    background: #3e8e41;
+  }
 }
 
 .result {
-  margin-top: 24px;
-  background: #fff9c4;
-  padding: 16px;
-  border-radius: 4px;
+  margin-top: 32px;
+  background: #2a2a2a;
+  padding: 24px;
+  border-radius: 8px;
+  border-left: 4px solid #4caf50;
+  
+  h3 {
+    margin-top: 0;
+    color: #4caf50;
+    margin-bottom: 16px;
+  }
+  
+  .output-container {
+    margin-bottom: 16px;
+    
+    .output-text {
+      white-space: pre-wrap;
+      font-family: 'Roboto Mono', monospace;
+      line-height: 1.5;
+    }
+  }
+  
+  .metrics {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #444444;
+    padding-top: 16px;
+    
+    .metric {
+      font-size: 0.9rem;
+      color: #bbbbbb;
+    }
+  }
 }
