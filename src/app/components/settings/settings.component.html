@@ -1,67 +1,112 @@
-<mat-card class="settings-card">
-  <mat-card-header>
-    <mat-card-title>API Settings</mat-card-title>
-  </mat-card-header>
+<div class="settings-container">
+  <div class="settings-header">
+    <h1 class="settings-title">Settings</h1>
+  </div>
 
-  <mat-card-content>
+  <div class="settings-content">
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>API Configuration</mat-card-title>
+        <mat-card-subtitle>Configure your AI model provider API keys</mat-card-subtitle>
+      </mat-card-header>
 
-    <p class="settings-subtitle">
-      Configure your AI model provider API keys
-    </p>
+      <mat-card-content>
+        <div class="provider-section">
+          <div class="provider-logo openai">
+            <mat-icon>smart_toy</mat-icon>
+            <h3>OpenAI</h3>
+          </div>
+          
+          <div class="api-field">
+            <mat-form-field>
+              <mat-label>OpenAI API Key</mat-label>
+              <input
+                matInput
+                [type]="hideOpenai ? 'password' : 'text'"
+                [(ngModel)]="openaiKey"
+                placeholder="sk-..."
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                (click)="toggleOpenaiVisibility()"
+                matTooltip="Toggle visibility"
+              >
+                <mat-icon>{{ hideOpenai ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+            </mat-form-field>
 
-    <div class="api-field">
-      <mat-form-field appearance="fill">
-        <mat-label>OpenAI API Key</mat-label>
-        <input
-          matInput
-          [type]="hideOpenai ? 'password' : 'text'"
-          [(ngModel)]="openaiKey"
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          (click)="toggleOpenaiVisibility()"
-          aria-label="Toggle OpenAI key visibility"
-        >
-          <mat-icon>{{ hideOpenai ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-      </mat-form-field>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="saveOpenaiKey()"
+              [disabled]="!openaiKey"
+            >
+              Save
+            </button>
+          </div>
+        </div>
 
-      <button
-        mat-stroked-button
-        color="primary"
-        (click)="saveOpenaiKey()"
-      >
-        Update
-      </button>
-    </div>
+        <div class="provider-section">
+          <div class="provider-logo gemini">
+            <mat-icon>auto_awesome</mat-icon>
+            <h3>Google Gemini</h3>
+          </div>
+          
+          <div class="api-field">
+            <mat-form-field>
+              <mat-label>Gemini API Key</mat-label>
+              <input
+                matInput
+                [type]="hideGemini ? 'password' : 'text'"
+                [(ngModel)]="geminiKey"
+                placeholder="AI..."
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                (click)="toggleGeminiVisibility()"
+                matTooltip="Toggle visibility"
+              >
+                <mat-icon>{{ hideGemini ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+            </mat-form-field>
 
-    <div class="api-field">
-      <mat-form-field appearance="fill">
-        <mat-label>Gemini API Key</mat-label>
-        <input
-          matInput
-          [type]="hideGemini ? 'password' : 'text'"
-          [(ngModel)]="geminiKey"
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          (click)="toggleGeminiVisibility()"
-          aria-label="Toggle Gemini key visibility"
-        >
-          <mat-icon>{{ hideGemini ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-      </mat-form-field>
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="saveGeminiKey()"
+              [disabled]="!geminiKey"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
-      <button
-        mat-stroked-button
-        color="primary"
-        (click)="saveGeminiKey()"
-      >
-        Update
-      </button>
-    </div>
-
-  </mat-card-content>
-</mat-card>
+    <mat-card class="settings-card info-card">
+      <mat-card-header>
+        <mat-card-title>About PromptHub</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-content">
+          <div class="app-info">
+            <h3>Version 1.0.0</h3>
+            <p>PromptHub is an AI prompt management platform that helps you organize and execute prompts across different AI providers.</p>
+          </div>
+          
+          <div class="features-list">
+            <h4>Features:</h4>
+            <ul>
+              <li>Create and manage reusable prompts</li>
+              <li>Execute prompts with different AI models</li>
+              <li>Track execution history and metrics</li>
+              <li>Template variables for dynamic content</li>
+            </ul>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Services
 import { PromptService } from '../../services/prompt.service';
@@ -32,7 +33,8 @@ import { ExecutionService, ExecutionResult } from '../../services/execution.serv
     MatIconModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule
   ],
   templateUrl: './execute.component.html',
   styleUrls: ['./execute.component.scss'],
@@ -84,7 +86,10 @@ export class ExecuteComponent implements OnInit {
       error: (err: HttpErrorResponse) => {
         this.error = `Failed to load prompt details: ${err.statusText}`;
         this.loading = false;
-        this.snackBar.open('Error loading prompt', 'Close', { duration: 3000 });
+        this.snackBar.open('Error loading prompt', 'Close', { 
+          duration: 3000,
+          panelClass: ['red-snackbar']
+        });
         console.error(err);
       }
     });
@@ -92,7 +97,10 @@ export class ExecuteComponent implements OnInit {
 
   onSubmit(): void {
     if (!this.inputText.trim()) {
-      this.snackBar.open('Please enter input text', 'Close', { duration: 3000 });
+      this.snackBar.open('Please enter input text', 'Close', { 
+        duration: 3000,
+        panelClass: ['yellow-snackbar']
+      });
       return;
     }
 
@@ -119,11 +127,32 @@ export class ExecuteComponent implements OnInit {
         console.error('Execute error:', err);
         this.error = `Failed to execute prompt: ${err.statusText || 'Unknown error'}`;
         if (err.error && typeof err.error === 'object') {
-          this.error += ` - ${err.error.detail || JSON.stringify(err.error)}`;
+          this.error += `\n${err.error.detail || JSON.stringify(err.error)}`;
         }
         this.loading = false;
-        this.snackBar.open('Error executing prompt', 'Close', { duration: 3000 });
+        this.snackBar.open('Error executing prompt', 'Close', { 
+          duration: 3000,
+          panelClass: ['red-snackbar']
+        });
       }
     });
+  }
+
+  copyToClipboard(text: string): void {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        this.snackBar.open('Copied to clipboard!', 'Close', { 
+          duration: 2000,
+          panelClass: ['green-snackbar']
+        });
+      },
+      (err) => {
+        console.error('Could not copy text: ', err);
+        this.snackBar.open('Failed to copy to clipboard', 'Close', { 
+          duration: 2000,
+          panelClass: ['red-snackbar']
+        });
+      }
+    );
   }
 }
