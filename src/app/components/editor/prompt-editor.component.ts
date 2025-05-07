@@ -50,7 +50,7 @@ export class PromptEditorComponent implements OnInit {
     'GPT-4',
     'GPT-3.5-turbo',
     'Gemini Pro',
-    'Gemini Flash',
+    'Gemini Flash'
   ];
 
   isEditMode = false;
@@ -130,6 +130,14 @@ export class PromptEditorComponent implements OnInit {
     } else {
       this.createPrompt(payload);
     }
+  }
+  
+  getModelClass(modelName: string): string {
+    const name = modelName.toLowerCase();
+    if (name.includes('gemini')) return 'gemini';
+    if (name.includes('gpt')) return 'gpt';
+    if (name.includes('claude')) return 'claude';
+    return 'default';
   }
 
   private createPrompt(payload: PromptCreate): void {

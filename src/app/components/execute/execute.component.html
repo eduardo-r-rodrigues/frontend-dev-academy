@@ -1,71 +1,185 @@
-<mat-card class="execute-card">
-  <mat-card-header>
-    <mat-card-title>Execute Prompt: {{ promptName }}</mat-card-title>
-    <mat-card-subtitle>Model: {{ iaModel }}</mat-card-subtitle>
-  </mat-card-header>
+<div class="execute-container">
+  <div class="execute-header">
+    <button mat-icon-button routerLink="/dashboard" class="back-btn" matTooltip="Back to Dashboard">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="execute-title">Execute Prompt: {{ promptName }}</h1>
+  </div>
 
-  <mat-card-content>
-    <!-- Loading Indicator -->
-    <div class="loading-container" *ngIf="loading">
-      <mat-spinner diameter="40"></mat-spinner>
-      <p>Processing...</p>
-    </div>
+  <div class="execute-content">
+    <!-- Input Card -->
+    <mat-card class="input-card">
+      <mat-card-header>
+        <mat-card-title>
+          <div class="card-header-content">
+            <span>Input</span>
+            <span class="model-chip">{{ iaModel }}</span>
+          </div>
+        </mat-card-title>
+      </mat-card-header>
 
-    <!-- Error Message -->
-    <div class="error-container" *ngIf="error">
-      <p class="error-message">{{ error }}</p>
-    </div>
+      <form (ngSubmit)="onSubmit()">
+        <mat-card-content>
+          <!-- Input Type Toggle -->
+          <div class="input-type-toggle">
+            <mat-button-toggle-group [(ngModel)]="inputType" name="inputType">
+              <mat-button-toggle value="text">
+                <mat-icon>text_fields</mat-icon>
+                Text
+              </mat-button-toggle>
+              <mat-button-toggle value="file">
+                <mat-icon>upload_file</mat-icon>
+                File
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
 
-    <!-- Execution Form -->
-    <form (ngSubmit)="onSubmit()" *ngIf="!loading">
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Prompt Template</mat-label>
-        <textarea
-          matInput
-          [(ngModel)]="inputText"
-          name="inputText"
-          rows="4"
-          required
-        ></textarea>
-      </mat-form-field>
+          <!-- Text Input -->
+          <ng-container *ngIf="inputType === 'text'">
+            <mat-form-field appearance="fill" class="full-width input-field">
+              <mat-label>Input Text</mat-label>
+              <textarea 
+                matInput 
+                [(ngModel)]="inputText" 
+                name="inputText" 
+                rows="5" 
+                placeholder="Enter your input text here..."
+                [required]="inputType === 'text'"
+              ></textarea>
+            </mat-form-field>
+          </ng-container>
 
-      <div class="vars" *ngIf="variableKeys.length">
-        <h3>Variables</h3>
-        <div *ngFor="let key of variableKeys" class="var-field">
-          <mat-form-field appearance="fill" class="var-input">
-            <mat-label>{{ key }}</mat-label>
-            <input
-              matInput
-              [(ngModel)]="variables[key]"
-              [name]="key"
-              placeholder="Value for {{ key }}"
-            />
-          </mat-form-field>
+          <!-- File Upload -->
+          <ng-container *ngIf="inputType === 'file'">
+            <div class="file-upload-container">
+              <button 
+                type="button"
+                mat-stroked-button 
+                color="primary"
+                (click)="fileInput.click()" 
+                class="upload-btn"
+              >
+                <mat-icon>cloud_upload</mat-icon>
+                {{ uploadedFile ? 'Change File' : 'Upload File' }}
+              </button>
+              <input 
+                #fileInput 
+                type="file" 
+                (change)="onFileSelected($event)"
+                accept=".pdf,.jpg,.jpeg,.png,.gif"
+                style="display: none"
+              />
+              
+              <div *ngIf="uploadedFile" class="file-info">
+                <mat-icon>{{ getFileIcon(uploadedFile.type) }}</mat-icon>
+                <span class="file-name">{{ uploadedFile.name }}</span>
+                <button 
+                  type="button"
+                  mat-icon-button 
+                  color="warn" 
+                  (click)="removeFile()"
+                  matTooltip="Remove file"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+              
+              <div *ngIf="!uploadedFile && inputType === 'file'" class="file-placeholder">
+                <mat-icon>upload_file</mat-icon>
+                <p>Drag & drop or click to upload PDF or image files</p>
+                <small>Supported formats: PDF, JPG, PNG, GIF</small>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Variables Section -->
+          <div class="variables-section" *ngIf="variableKeys.length > 0">
+            <h3 class="variables-title">Variables</h3>
+            <div class="variables-grid">
+              <mat-form-field *ngFor="let key of variableKeys" appearance="fill">
+                <mat-label>{{ key }}</mat-label>
+                <input 
+                  matInput 
+                  [(ngModel)]="variables[key]" 
+                  [name]="'var_' + key" 
+                  placeholder="Enter {{ key }} value"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button 
+            mat-flat-button 
+            color="accent"
+            type="submit" 
+            [disabled]="loading || (inputType === 'text' && !inputText) || (inputType === 'file' && !uploadedFile)"
+            class="submit-btn"
+          >
+            <mat-icon>play_arrow</mat-icon>
+            Execute
+          </button>
+        </mat-card-actions>
+      </form>
+    </mat-card>
+
+    <!-- Result Card -->
+    <mat-card class="result-card">
+      <mat-card-header>
+        <mat-card-title>
+          <div class="card-header-content">
+            <span>Result</span>
+            <button 
+              *ngIf="output" 
+              mat-icon-button 
+              (click)="copyToClipboard(output)"
+              matTooltip="Copy to clipboard"
+            >
+              <mat-icon>content_copy</mat-icon>
+            </button>
+          </div>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Loading State -->
+        <div *ngIf="loading" class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Processing your request...</p>
         </div>
-      </div>
 
-      <button
-        mat-flat-button
-        color="primary"
-        class="full-width submit-btn"
-        type="submit"
-        [disabled]="loading"
-      >
-        <mat-icon>play_arrow</mat-icon>
-        Execute
-      </button>
-    </form>
+        <!-- Error State -->
+        <div *ngIf="error" class="error-container">
+          <mat-icon class="error-icon">error</mat-icon>
+          <p class="error-message">{{ error }}</p>
+        </div>
 
-    <!-- Result Section -->
-    <div *ngIf="output !== null" class="result">
-      <h3>Result</h3>
-      <div class="output-container">
-        <p class="output-text">{{ output }}</p>
-      </div>
-      <div class="metrics">
-        <span class="metric">Latency: {{ latency_ms }} ms</span>
-        <span class="metric">Cost: ${{ cost }}</span>
-      </div>
-    </div>
-  </mat-card-content>
-</mat-card>
+        <!-- Empty State -->
+        <div *ngIf="!loading && !error && output === null" class="empty-state">
+          <mat-icon>smart_toy</mat-icon>
+          <p>Execute the prompt to see results here</p>
+        </div>
+
+        <!-- Result Display -->
+        <ng-container *ngIf="!loading && !error && output !== null">
+          <div class="result-content">
+            <p class="result-text">{{ output }}</p>
+          </div>
+          
+          <div class="metrics-row">
+            <span class="metric">
+              <mat-icon>timer</mat-icon>
+              Latency: {{ latency_ms }} ms
+            </span>
+            <span class="metric">
+              <mat-icon>attach_money</mat-icon>
+              Cost: ${{ cost }}
+            </span>
+          </div>
+        </ng-container>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
