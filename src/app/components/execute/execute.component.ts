@@ -76,7 +76,8 @@ export class ExecuteComponent implements OnInit {
         this.iaModel = prompt.ia_model;
         this.variableKeys = prompt.variables;
         
-        // Initialize variables object with empty values
+        this.inputText = prompt.template;
+        
         this.variableKeys.forEach(key => {
           this.variables[key] = '';
         });

@@ -51,7 +51,6 @@ export class PromptEditorComponent implements OnInit {
     'GPT-3.5-turbo',
     'Gemini Pro',
     'Gemini Flash',
-    'Claude 3'
   ];
 
   isEditMode = false;

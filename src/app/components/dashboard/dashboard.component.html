@@ -1,7 +1,12 @@
 <div class="dashboard-wrapper">
   <div class="dashboard-header">
     <h1 class="dashboard-title">Prompt Library</h1>
-    <button mat-flat-button color="primary" routerLink="/prompts/new" class="new-prompt-btn">
+    <button
+      mat-flat-button
+      color="primary"
+      routerLink="/prompts/new"
+      class="new-prompt-btn"
+    >
       <mat-icon>add_circle</mat-icon>
       Create New Prompt
     </button>
@@ -15,7 +20,9 @@
   <div *ngIf="error" class="error-container">
     <mat-icon class="error-icon">error</mat-icon>
     <p class="error-message">{{ error }}</p>
-    <button mat-stroked-button color="primary" (click)="loadPrompts()">Retry</button>
+    <button mat-stroked-button color="primary" (click)="loadPrompts()">
+      Retry
+    </button>
   </div>
 
   <div *ngIf="!loading && !error" class="dashboard-content">
@@ -30,37 +37,63 @@
     </div>
 
     <div *ngIf="prompts.length > 0" class="dashboard-grid">
-      <mat-card *ngFor="let prompt of prompts" class="prompt-card" [class.highlight]="prompt.ia_model.toLowerCase().includes('gpt')">
+      <mat-card
+        *ngFor="let prompt of prompts"
+        class="prompt-card"
+        [class.highlight]="prompt.ia_model.toLowerCase().includes('gpt')"
+      >
         <div class="card-header">
           <h2 class="prompt-name">{{ prompt.name }}</h2>
-          <div class="model-badge" [ngClass]="getModelClass(prompt.ia_model)">{{ prompt.ia_model }}</div>
+          <div class="model-badge" [ngClass]="getModelClass(prompt.ia_model)">
+            {{ prompt.ia_model }}
+          </div>
         </div>
-        
+
         <mat-card-content>
           <p class="prompt-preview">{{ getPreviewText(prompt.template) }}</p>
-          
+
           <div class="variables-container" *ngIf="prompt.variables.length > 0">
             <h3 class="variables-title">Variables</h3>
             <div class="variables-list">
-              <span class="variable-tag" *ngFor="let variable of prompt.variables">{{ variable }}</span>
+              <span
+                class="variable-tag"
+                *ngFor="let variable of prompt.variables"
+                >{{ variable }}</span
+              >
             </div>
           </div>
         </mat-card-content>
-        
+
         <mat-card-actions>
           <div class="action-buttons">
-            <button mat-flat-button class="execute-btn" (click)="executePrompt(prompt.id)">
+            <button
+              mat-flat-button
+              class="execute-btn"
+              (click)="executePrompt(prompt.id)"
+            >
               <mat-icon>play_arrow</mat-icon>
               Execute
             </button>
             <div class="secondary-actions">
-              <button mat-icon-button matTooltip="Edit Prompt" (click)="editPrompt(prompt.id)">
+              <button
+                mat-icon-button
+                matTooltip="Edit Prompt"
+                (click)="editPrompt(prompt.id)"
+              >
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button matTooltip="View Analytics" (click)="viewMetrics(prompt.id)">
+              <button
+                mat-icon-button
+                matTooltip="View Analytics"
+                (click)="viewMetrics(prompt.id)"
+              >
                 <mat-icon>insights</mat-icon>
               </button>
-              <button mat-icon-button matTooltip="Delete Prompt" (click)="confirmDelete(prompt)">
+              <button
+                mat-icon-button
+                matTooltip="Delete Prompt"
+                (click)="confirmDelete(prompt)"
+              >
                 <mat-icon class="delete-icon">delete</mat-icon>
               </button>
             </div>

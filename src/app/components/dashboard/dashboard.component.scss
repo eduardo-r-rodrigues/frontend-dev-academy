@@ -194,16 +194,19 @@
 }
 
 .action-buttons {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding: 16px;
 }
 
 .execute-btn {
   background-color: var(--primary-light);
   color: var(--background-dark);
   font-weight: 500;
+  position: absolute;
   
   mat-icon {
     margin-right: 4px;
@@ -211,6 +214,7 @@
 }
 
 .secondary-actions {
+  margin-left: auto;
   display: flex;
   align-items: center;
   

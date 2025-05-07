@@ -1,15 +1,27 @@
 <div class="editor-container">
   <div class="editor-header">
     <div class="header-left">
-      <button mat-icon-button matTooltip="Back to Dashboard" routerLink="/dashboard" class="back-btn">
+      <button
+        mat-icon-button
+        matTooltip="Back to Dashboard"
+        routerLink="/dashboard"
+        class="back-btn"
+      >
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <h1 class="editor-title">{{ isEditMode ? 'Edit Prompt' : 'Create New Prompt' }}</h1>
+      <h1 class="editor-title">
+        {{ isEditMode ? "Edit Prompt" : "Create New Prompt" }}
+      </h1>
     </div>
-    
-    <button mat-flat-button color="accent" (click)="onSubmit()" [disabled]="form.invalid">
-      <mat-icon>{{ isEditMode ? 'update' : 'save' }}</mat-icon>
-      {{ isEditMode ? 'Update Prompt' : 'Save Prompt' }}
+
+    <button
+      mat-flat-button
+      color="accent"
+      (click)="onSubmit()"
+      [disabled]="form.invalid"
+    >
+      <mat-icon>{{ isEditMode ? "update" : "save" }}</mat-icon>
+      {{ isEditMode ? "Update Prompt" : "Save Prompt" }}
     </button>
   </div>
 
@@ -34,17 +46,20 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field class="full-width">
-            <mat-label>AI Model</mat-label>
-            <mat-select formControlName="ia_model">
-              <mat-option *ngFor="let model of availableModels" [value]="model">
+          <!-- Replacing mat-select with the new IA Models container -->
+          <div class="ia-models-container">
+            <label class="section-title">IA Model</label>
+            <div class="models-grid">
+              <div
+                class="model-card"
+                *ngFor="let model of availableModels"
+                (click)="form.get('ia_model')?.setValue(model)"
+                [class.selected]="form.get('ia_model')?.value === model"
+              >
                 {{ model }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('ia_model')?.hasError('required')">
-              Please select an AI model
-            </mat-error>
-          </mat-form-field>
+              </div>
+            </div>
+          </div>
 
           <mat-form-field class="full-width">
             <mat-label>Prompt Template</mat-label>
@@ -54,7 +69,10 @@
               rows="10"
               placeholder="Write your prompt template here..."
             ></textarea>
-            <mat-hint align="end">Use {{ '{variable_name}' }} syntax for dynamic variables</mat-hint>
+            <mat-hint align="end"
+              >Use {{ "{variable_name}" }} syntax for dynamic
+              variables</mat-hint
+            >
             <mat-error *ngIf="form.get('template')?.hasError('required')">
               Prompt template is required
             </mat-error>
@@ -68,7 +86,9 @@
       <mat-card class="editor-card variables-card">
         <mat-card-header>
           <mat-card-title>Variables</mat-card-title>
-          <mat-card-subtitle>Define variables to use in your template</mat-card-subtitle>
+          <mat-card-subtitle
+            >Define variables to use in your template</mat-card-subtitle
+          >
         </mat-card-header>
 
         <mat-card-content>
@@ -100,7 +120,11 @@
             <div class="variables-container">
               <div class="variable-chip" *ngFor="let variable of variables">
                 <span class="variable-name">{{ variable }}</span>
-                <button mat-icon-button (click)="removeVariable(variable)" matTooltip="Remove variable">
+                <button
+                  mat-icon-button
+                  (click)="removeVariable(variable)"
+                  matTooltip="Remove variable"
+                >
                   <mat-icon class="remove-icon">close</mat-icon>
                 </button>
               </div>
@@ -108,9 +132,13 @@
           </div>
 
           <div class="variables-empty" *ngIf="variables.length === 0">
-            <p>No variables added yet. Variables allow you to make your prompt dynamic.</p>
+            <p>
+              No variables added yet. Variables allow you to make your prompt
+              dynamic.
+            </p>
             <p class="example">
-              Example: "Write a story about {{ '{topic}' }} in the style of {{ '{author}' }}".
+              Example: "Write a story about {{ "{topic}" }} in the style of
+              {{ "{author}" }}".
             </p>
           </div>
         </mat-card-content>
@@ -123,9 +151,13 @@
         <mat-card-content>
           <div class="help-content">
             <h3 class="section-title">How to use variables</h3>
-            <p>In your prompt template, use curly braces to insert variables:</p>
-            <pre class="code-example">Write a poem about {{ '{subject}' }} in {{ '{style}' }} style.</pre>
-            
+            <p>
+              In your prompt template, use curly braces to insert variables:
+            </p>
+            <pre class="code-example">
+Write a poem about {{ "{subject}" }} in {{ "{style}" }} style.</pre
+            >
+
             <h3 class="section-title">Tips</h3>
             <ul class="tips-list">
               <li>Be specific with your instructions</li>
