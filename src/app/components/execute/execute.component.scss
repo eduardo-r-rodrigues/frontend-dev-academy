@@ -76,6 +76,44 @@
   line-height: 1;
 }
 
+.template-editor-section {
+  margin-bottom: 24px;
+}
+
+.section-label {
+  display: block;
+  font-size: 1rem;
+  color: var(--primary-lighter);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.template-field-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.template-textarea {
+  width: 100%;
+  min-height: 180px;
+  padding: 16px;
+  background-color: var(--background-input);
+  color: var(--text-primary);
+  border: 1px solid #444;
+  border-radius: 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+.template-hint {
+  position: absolute;
+  bottom: -20px;
+  right: 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
 .input-type-toggle {
   margin-bottom: 24px;
   display: flex;
@@ -104,8 +142,33 @@
   }
 }
 
-.input-field {
+.input-field-container {
   margin-bottom: 24px;
+}
+
+.input-label {
+  display: block;
+  font-size: 1rem;
+  color: var(--primary-lighter);
+  margin-bottom: 12px;
+  
+  .required {
+    color: var(--error-color);
+    margin-left: 4px;
+  }
+}
+
+.input-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 16px;
+  background-color: var(--background-input);
+  color: var(--text-primary);
+  border: 1px solid #444;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+  resize: vertical;
 }
 
 .file-upload-container {

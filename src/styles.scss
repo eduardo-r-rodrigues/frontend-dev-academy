@@ -1,20 +1,23 @@
 /* Global styles with green palette */
 
+
 :root {
   --primary-color: #1B263B; /* Dark blue */
-    --primary-light: #415A77; /* Medium blue */
-    --primary-lighter: #778DA9; /* Light blue-gray */
-    --primary-dark: #0D1B2A; /* Very dark blue */
-    --accent-color: #778DA9; /* Light blue-gray for accent */
-    --text-on-primary: #ffffff;
-    --background-dark: #121212;
-    --background-card: #1e1e1e;
-    --background-input: #2a2a2a;
-    --text-primary: #ffffff;
-    --text-secondary: #bbbbbb;
-    --error-color: #f44336;
-    --success-color: #00e676;
-  }
+  --primary-light: #415A77; /* Medium blue */
+  --primary-lighter: #778DA9; /* Light blue-gray */
+  --primary-dark: #0D1B2A; /* Very dark blue */
+  --accent-color: #778DA9; /* Light blue-gray for accent */
+  --text-on-primary: #ffffff;
+  --background-dark: #121212;
+  --background-card: #1e1e1e;
+  --background-input: #2a2a2a;
+  --text-primary: #ffffff;
+  --text-secondary: #bbbbbb;
+  --error-color: #f44336;
+  --success-color: #00e676;
+  --warning-color: #ffb74d;
+  --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
   
   html, body { 
     height: 100%;

@@ -18,7 +18,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Services
 import { PromptService } from '../../services/prompt.service';
-import { ExecutionService, ExecutionResult } from '../../services/execution.service';
+import { ExecutionService } from '../../services/execution.service';
+
+// Models 
+import { PromptOut } from '../../models/prompt.model';
+
+interface ExecutionResult {
+  output: any;
+  latency_ms: number;
+  cost: number;
+}
 
 @Component({
   selector: 'app-execute',
@@ -46,6 +55,8 @@ export class ExecuteComponent implements OnInit {
   
   promptId!: string;
   promptName: string = '';
+  promptTemplate: string = '';
+  originalTemplate: string = ''; // Store original to detect changes
   iaModel: string = '';
   inputType: 'text' | 'file' = 'text';
   inputText: string = '';
@@ -78,11 +89,15 @@ export class ExecuteComponent implements OnInit {
   loadPromptDetails(): void {
     this.loading = true;
     this.promptService.getPrompt(this.promptId).subscribe({
-      next: (prompt) => {
+      next: (prompt: PromptOut) => {
         this.promptName = prompt.name;
         this.iaModel = prompt.ia_model;
+        this.promptTemplate = prompt.template; // Set the prompt template for editing
+        this.originalTemplate = prompt.template; // Store original
         this.variableKeys = prompt.variables;
         
+
+        this.inputText = prompt.template || ''; // Set initial input text to template
         // Initialize variables
         this.variableKeys.forEach(key => {
           this.variables[key] = '';
@@ -182,37 +197,87 @@ export class ExecuteComponent implements OnInit {
   }
 
   executeWithText(): void {
-    this.executionService.executePrompt(
-      this.promptId,
-      this.inputText,
-      this.variables,
-      this.iaModel
-    ).subscribe({
-      next: (result: ExecutionResult) => {
-        this.processResult(result);
-      },
-      error: (err: HttpErrorResponse) => {
-        this.handleExecutionError(err);
-      }
-    });
+    // Make sure promptTemplate is defined to avoid undefined errors
+    const template = this.promptTemplate || ''; 
+    
+    // Check if template was modified from original
+    const useCustomTemplate = template !== this.originalTemplate;
+    
+    if (useCustomTemplate) {
+      // Use custom template execution
+      this.executionService.executePromptWithCustomTemplate(
+        this.promptId,
+        template,
+        this.inputText,
+        this.variables,
+        this.iaModel
+      ).subscribe({
+        next: (result: ExecutionResult) => {
+          this.processResult(result);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.handleExecutionError(err);
+        }
+      });
+    } else {
+      // Use standard execution (no custom template)
+      this.executionService.executePrompt(
+        this.promptId,
+        this.inputText,
+        this.variables,
+        this.iaModel
+      ).subscribe({
+        next: (result: ExecutionResult) => {
+          this.processResult(result);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.handleExecutionError(err);
+        }
+      });
+    }
   }
 
   executeWithFile(): void {
     if (!this.uploadedFile) return;
     
-    this.executionService.executePromptWithFile(
-      this.promptId,
-      this.uploadedFile,
-      this.variables,
-      this.iaModel
-    ).subscribe({
-      next: (result: ExecutionResult) => {
-        this.processResult(result);
-      },
-      error: (err: HttpErrorResponse) => {
-        this.handleExecutionError(err);
-      }
-    });
+    // Make sure promptTemplate is defined to avoid undefined errors
+    const template = this.promptTemplate || '';
+    
+    // Check if template was modified from original
+    const useCustomTemplate = template !== this.originalTemplate;
+    
+    if (useCustomTemplate) {
+      // Use custom template execution
+      this.executionService.executePromptWithFileAndCustomTemplate(
+        this.promptId,
+        template,
+        this.uploadedFile,
+        this.variables,
+        this.iaModel
+      ).subscribe({
+        next: (result: ExecutionResult) => {
+          this.processResult(result);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.handleExecutionError(err);
+        }
+      });
+    } else {
+      // Use standard execution (no custom template)
+      this.executionService.executePromptWithFile(
+        this.promptId,
+        this.uploadedFile,
+        this.variables,
+        this.iaModel
+      ).subscribe({
+        next: (result: ExecutionResult) => {
+          this.processResult(result);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.handleExecutionError(err);
+        }
+      });
+    }
   }
 
   private processResult(result: ExecutionResult): void {
