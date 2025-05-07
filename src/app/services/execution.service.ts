@@ -15,7 +15,7 @@ export class ExecutionService {
   // Map of frontend model names to backend model IDs
   private modelMap: Record<string, string> = {
     'GPT-4': 'gpt-4',
-    'GPT-3.5': 'gpt-3.5-turbo',
+    'GPT-3.5-turbo': 'gpt-3.5-turbo',
     'Gemini Pro': 'gemini-1.5-pro',
     'Gemini Flash': 'gemini-1.5-flash',
     'Claude 3': 'claude-3-opus'
@@ -26,7 +26,12 @@ export class ExecutionService {
   /**
    * Execute a prompt with text input
    */
-  executePrompt(promptId: string, inputText: string, variables: Record<string, any> = {}, iaModel?: string): Observable<ExecutionResult> {
+  executePrompt(
+    promptId: string, 
+    inputText: string, 
+    variables: Record<string, any> = {}, 
+    iaModel?: string
+  ): Observable<ExecutionResult> {
     // Create form data for multipart request
     const formData = new FormData();
     formData.append('prompt_id', promptId);
@@ -40,18 +45,22 @@ export class ExecutionService {
       formData.append('ia_model', backendModel);
     }
     
-    // Use the correct endpoint now that you've fixed the router
     return this.http.post<ExecutionResult>(`${this.baseUrl}/execute`, formData);
   }
 
   /**
-   * Execute a prompt with file input
+   * Execute a prompt with file input (PDF or image)
    */
-  executePromptWithFile(promptId: string, file: File, variables: Record<string, any> = {}, iaModel?: string): Observable<ExecutionResult> {
+  executePromptWithFile(
+    promptId: string, 
+    file: File, 
+    variables: Record<string, any> = {}, 
+    iaModel?: string
+  ): Observable<ExecutionResult> {
     // Create form data for multipart request
     const formData = new FormData();
     formData.append('prompt_id', promptId);
-    formData.append('input_file', file);
+    formData.append('input_file', file, file.name); // Add filename to properly preserve it
     formData.append('variables', JSON.stringify(variables));
     
     // Convert frontend model name to backend model ID if needed
@@ -61,7 +70,6 @@ export class ExecutionService {
       formData.append('ia_model', backendModel);
     }
     
-    // Use the correct endpoint now that you've fixed the router
     return this.http.post<ExecutionResult>(`${this.baseUrl}/execute`, formData);
   }
 }
