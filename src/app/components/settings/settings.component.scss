@@ -1,43 +1,147 @@
-.settings-card {
-  width: 80%;
-  max-width: 800px;
-  margin: 24px auto;
-  padding: 24px;
-  background: #1e1e1e;
-  color: #fff;
-  border-radius: 8px;
+.settings-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
 
-  mat-card-title {
-    color: #fff;
-    font-size: 1.5rem;
-  }
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
 
-  mat-card-content {
-    .api-field {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 24px;
-
-      mat-form-field {
-        flex: 1;
-      }
-
-      button[mat-stroked-button] {
-        min-width: 90px;
-        height: 56px;            
-        border-radius: 8px;      
-        background: #000;
-        color: #fff;
-        text-transform: none;    
-        align-self: center;
-      }
-    }
+.settings-title {
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  margin: 0;
+  
+  &::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, var(--primary-light), var(--primary-lighter));
+    margin-top: 8px;
+    border-radius: 3px;
   }
 }
 
-.settings-subtitle {
-  color: #ccc;
-  margin: 8px 0 24px;
-  font-size: 0.9rem;
+.settings-card {
+  background-color: var(--background-card);
+  margin-bottom: 24px;
+  
+  mat-card-title {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+  }
+  
+  mat-card-subtitle {
+    color: var(--text-secondary);
+  }
+}
+
+.provider-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.provider-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 24px;
+  width: 100px;
+  
+  mat-icon {
+    font-size: 32px;
+    height: 32px;
+    width: 32px;
+    margin-bottom: 8px;
+  }
+  
+  h3 {
+    font-size: 0.9rem;
+    margin: 0;
+    text-align: center;
+    font-weight: 500;
+  }
+  
+  &.openai mat-icon {
+    color: #10a37f;
+  }
+  
+  &.gemini mat-icon {
+    color: #4285f4;
+  }
+}
+
+.api-field {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 16px;
+  
+  mat-form-field {
+    flex: 1;
+  }
+  
+  button[mat-flat-button] {
+    height: 36px;
+    min-width: 80px;
+  }
+}
+
+.info-card {
+  background-color: var(--primary-dark);
+  
+  .info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .app-info {
+    h3 {
+      font-size: 1.2rem;
+      margin: 0 0 8px;
+      color: var(--primary-lighter);
+      font-weight: 400;
+    }
+    
+    p {
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+  
+  .features-list {
+    h4 {
+      font-size: 1rem;
+      margin: 0 0 12px;
+      color: var(--primary-lighter);
+      font-weight: 400;
+    }
+    
+    ul {
+      margin: 0;
+      padding-left: 24px;
+      color: var(--text-secondary);
+      
+      li {
+        margin-bottom: 4px;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
 }
