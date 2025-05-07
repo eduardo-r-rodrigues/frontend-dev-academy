@@ -49,6 +49,33 @@ export class ExecutionService {
   }
 
   /**
+   * Execute a prompt with custom template and text input
+   */
+  executePromptWithCustomTemplate(
+    promptId: string,
+    customTemplate: string,
+    inputText: string, 
+    variables: Record<string, any> = {}, 
+    iaModel?: string
+  ): Observable<ExecutionResult> {
+    // Create form data for multipart request
+    const formData = new FormData();
+    formData.append('prompt_id', promptId);
+    formData.append('custom_template', customTemplate);
+    formData.append('input_text', inputText);
+    formData.append('variables', JSON.stringify(variables));
+    
+    // Convert frontend model name to backend model ID if needed
+    const backendModel = iaModel ? (this.modelMap[iaModel] || iaModel) : undefined;
+    
+    if (backendModel) {
+      formData.append('ia_model', backendModel);
+    }
+    
+    return this.http.post<ExecutionResult>(`${this.baseUrl}/execute`, formData);
+  }
+
+  /**
    * Execute a prompt with file input (PDF or image)
    */
   executePromptWithFile(
@@ -60,6 +87,33 @@ export class ExecutionService {
     // Create form data for multipart request
     const formData = new FormData();
     formData.append('prompt_id', promptId);
+    formData.append('input_file', file, file.name); // Add filename to properly preserve it
+    formData.append('variables', JSON.stringify(variables));
+    
+    // Convert frontend model name to backend model ID if needed
+    const backendModel = iaModel ? (this.modelMap[iaModel] || iaModel) : undefined;
+    
+    if (backendModel) {
+      formData.append('ia_model', backendModel);
+    }
+    
+    return this.http.post<ExecutionResult>(`${this.baseUrl}/execute`, formData);
+  }
+
+  /**
+   * Execute a prompt with custom template and file input (PDF or image)
+   */
+  executePromptWithFileAndCustomTemplate(
+    promptId: string,
+    customTemplate: string,
+    file: File, 
+    variables: Record<string, any> = {}, 
+    iaModel?: string
+  ): Observable<ExecutionResult> {
+    // Create form data for multipart request
+    const formData = new FormData();
+    formData.append('prompt_id', promptId);
+    formData.append('custom_template', customTemplate);
     formData.append('input_file', file, file.name); // Add filename to properly preserve it
     formData.append('variables', JSON.stringify(variables));
     

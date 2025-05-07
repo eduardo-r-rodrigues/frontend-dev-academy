@@ -1,3 +1,4 @@
+<!-- execute.component.html -->
 <div class="execute-container">
   <div class="execute-header">
     <button mat-icon-button routerLink="/dashboard" class="back-btn" matTooltip="Back to Dashboard">
@@ -20,6 +21,20 @@
 
       <form (ngSubmit)="onSubmit()">
         <mat-card-content>
+          <!-- Prompt Template Editor -->
+          <div class="template-editor-section">
+            <h3 class="section-label">Prompt Template</h3>
+            <div class="template-field-container">
+              <textarea 
+                [(ngModel)]="promptTemplate" 
+                name="promptTemplate" 
+                rows="8"
+                class="template-textarea"
+                placeholder="Edit your prompt template here..."></textarea>
+              <div class="template-hint">Use {{"{variable_name}"}} syntax for dynamic variables</div>
+            </div>
+          </div>
+
           <!-- Input Type Toggle -->
           <div class="input-type-toggle">
             <mat-button-toggle-group [(ngModel)]="inputType" name="inputType">
@@ -36,17 +51,17 @@
 
           <!-- Text Input -->
           <ng-container *ngIf="inputType === 'text'">
-            <mat-form-field appearance="fill" class="full-width input-field">
-              <mat-label>Input Text</mat-label>
+            <div class="input-field-container">
+              <label for="inputText" class="input-label">Input Text<span class="required">*</span></label>
               <textarea 
-                matInput 
                 [(ngModel)]="inputText" 
                 name="inputText" 
-                rows="5" 
+                id="inputText"
+                rows="5"
+                class="input-textarea"
                 placeholder="Enter your input text here..."
-                [required]="inputType === 'text'"
-              ></textarea>
-            </mat-form-field>
+                [required]="inputType === 'text'"></textarea>
+            </div>
           </ng-container>
 
           <!-- File Upload -->
