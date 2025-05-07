@@ -1,45 +1,43 @@
-// src/app/components/editor/prompt-editor.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
   FormBuilder,
   FormGroup,
-  Validators
+  Validators,
+  FormsModule
 } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PromptService } from '../../services/prompt.service';
 import { PromptCreate } from '../../models/prompt.model';
 
-import { MatSelectModule } from '@angular/material/select';
-import { MatOptionModule } from '@angular/material/core';
-
+// Angular Material
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-prompt-editor',
   standalone: true,
   imports: [
     CommonModule,
-    MatSelectModule,
-    MatOptionModule,
     ReactiveFormsModule,
     FormsModule,
+    RouterModule,
+    // Angular Material
     MatCardModule,
-    MatListModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatListModule,
+    MatSnackBarModule,
+    MatTooltipModule
   ],
   templateUrl: './prompt-editor.component.html',
   styleUrls: ['./prompt-editor.component.scss'],
@@ -48,7 +46,12 @@ export class PromptEditorComponent implements OnInit {
   form!: FormGroup;
   variables: string[] = [];
   newVariable = '';
-  availableModels = ['GPT-4', 'GPT-3.5', 'Gemini Pro', 'Claude 3', 'Llama 3'];
+  availableModels = [
+    'GPT-4',
+    'GPT-3.5-turbo',
+    'Gemini Pro',
+    'Gemini Flash',
+  ];
 
   isEditMode = false;
   promptId: string | null = null;
@@ -57,7 +60,8 @@ export class PromptEditorComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private promptService: PromptService
+    private promptService: PromptService,
+    private snackBar: MatSnackBar
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -70,31 +74,47 @@ export class PromptEditorComponent implements OnInit {
     this.promptId = this.route.snapshot.paramMap.get('id');
     if (this.promptId) {
       this.isEditMode = true;
-      this.promptService.getPrompt(this.promptId).subscribe(p => {
+      this.loadPromptData();
+    }
+  }
+
+  loadPromptData(): void {
+    if (!this.promptId) return;
+    
+    this.promptService.getPrompt(this.promptId).subscribe({
+      next: (prompt) => {
         this.form.patchValue({
-          name: p.name,
-          template: p.template,
-          ia_model: p.ia_model,
+          name: prompt.name,
+          template: prompt.template,
+          ia_model: prompt.ia_model,
         });
-        this.variables = [...p.variables];
-      });
+        this.variables = [...prompt.variables];
+      },
+      error: (err) => {
+        this.showErrorSnackbar('Failed to load prompt details');
+        console.error('Error loading prompt:', err);
+      }
+    });
+  }
+
+  addVariable(): void {
+    const value = this.newVariable.trim();
+    if (value && !this.variables.includes(value)) {
+      this.variables.push(value);
+      this.newVariable = '';
+    } else if (this.variables.includes(value)) {
+      this.showErrorSnackbar('Variable already exists');
     }
   }
 
-  addVariable() {
-    const v = this.newVariable.trim();
-    if (v && !this.variables.includes(v)) {
-      this.variables.push(v);
-    }
-    this.newVariable = '';
+  removeVariable(variable: string): void {
+    this.variables = this.variables.filter(v => v !== variable);
   }
 
-  removeVariable(v: string) {
-    this.variables = this.variables.filter(x => x !== v);
-  }
-
-  onSubmit() {
+  onSubmit(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.showErrorSnackbar('Please fill all required fields');
       return;
     }
 
@@ -106,13 +126,49 @@ export class PromptEditorComponent implements OnInit {
     };
 
     if (this.isEditMode && this.promptId) {
-      this.promptService.updatePrompt(this.promptId, payload).subscribe(() => {
-        this.router.navigate(['/dashboard']);
-      });
+      this.updatePrompt(this.promptId, payload);
     } else {
-      this.promptService.createPrompt(payload).subscribe(() => {
-        this.router.navigate(['/dashboard']);
-      });
+      this.createPrompt(payload);
     }
+  }
+
+  private createPrompt(payload: PromptCreate): void {
+    this.promptService.createPrompt(payload).subscribe({
+      next: () => {
+        this.showSuccessSnackbar('Prompt created successfully');
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.showErrorSnackbar('Failed to create prompt');
+        console.error('Error creating prompt:', err);
+      }
+    });
+  }
+
+  private updatePrompt(id: string, payload: PromptCreate): void {
+    this.promptService.updatePrompt(id, payload).subscribe({
+      next: () => {
+        this.showSuccessSnackbar('Prompt updated successfully');
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.showErrorSnackbar('Failed to update prompt');
+        console.error('Error updating prompt:', err);
+      }
+    });
+  }
+
+  private showSuccessSnackbar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: ['green-snackbar']
+    });
+  }
+
+  private showErrorSnackbar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: ['red-snackbar']
+    });
   }
 }

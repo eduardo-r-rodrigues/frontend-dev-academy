@@ -19,13 +19,12 @@
     <!-- Execution Form -->
     <form (ngSubmit)="onSubmit()" *ngIf="!loading">
       <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Input Text</mat-label>
+        <mat-label>Prompt Template</mat-label>
         <textarea
           matInput
           [(ngModel)]="inputText"
           name="inputText"
           rows="4"
-          placeholder="Enter your text here..."
           required
         ></textarea>
       </mat-form-field>

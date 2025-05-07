@@ -1,96 +1,250 @@
-.dashboard-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(470px, 1fr));
-  gap: 24px;
-  padding: 24px;
+.dashboard-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
-.dashboard-card {
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  margin: 0;
+  
+  &::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, var(--primary-light), var(--primary-lighter));
+    margin-top: 8px;
+    border-radius: 3px;
+  }
+}
+
+.new-prompt-btn {
+  background-color: var(--accent-color) !important;
+  color: var(--background-dark) !important;
+  font-weight: 500;
+  padding: 0 20px;
+  height: 48px;
+  border-radius: 24px;
+  
+  mat-icon {
+    margin-right: 8px;
+  }
+}
+
+.loading-container, .error-container, .empty-state {
   display: flex;
   flex-direction: column;
-  background: #1e1e1e;
-  color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  height: 350px;
-
-  mat-card-header {
-    padding-bottom: 0;
-  }
-  mat-card-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-  mat-card-subtitle {
-    margin-top: 4px;
-    font-size: 0.875rem;
-    color: #ccc;
-  }
-
-  mat-card-content {
-    flex-grow: 1;
-    .badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 16px 0;
-      .badge {
-        background: #333;
-        color: #fff;
-        padding: 4px 12px;
-        border-radius: 16px;
-        font-size: 0.75rem;
-        font-weight: 500;
-      }
-    }
-  }
-
-  mat-card-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 8px;
-    padding: 16px;
-    margin-top: auto;
-
-    /* Execute & Edit */
-    button[mat-flat-button] {
-      min-width: 120px;
-      background: #fff;
-      color: #000;
-      text-transform: none;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* Metrics & Delete */
-    button[mat-stroked-button] {
-      min-width: 120px;
-      border-color: #fff;
-      color: #fff;
-      background: transparent;
-      text-transform: none;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* Hover vermelho no delete */
-    .delete-btn:hover {
-      background: #e53935 !important;
-      color: #fff !important;
-      border-color: #e53935 !important;
-    }
-  }
-}
-
-.center-text {
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
   text-align: center;
-  margin: 48px 0;
-  color: #ccc;
 }
 
-.error {
-  color: #f44336;
+.error-container {
+  .error-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    color: var(--error-color);
+    margin-bottom: 16px;
+  }
+  
+  .error-message {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
 }
+
+.empty-state {
+  .empty-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    color: var(--primary-lighter);
+    margin-bottom: 24px;
+    opacity: 0.8;
+  }
+  
+  h2 {
+    margin: 0 0 12px;
+    font-weight: 400;
+  }
+  
+  p {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.prompt-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--background-card);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 4px solid var(--primary-lighter);
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  }
+  
+  &.highlight {
+    border-left-color: var(--primary-color);
+  }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 16px 8px;
+}
+
+.prompt-name {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+}
+
+.model-badge {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  
+  &.gemini {
+    background-color: #2d75ff;
+    color: white;
+  }
+  
+  &.gpt {
+    background-color: #10a37f;
+    color: white;
+  }
+  
+  &.claude {
+    background-color: #a265ff;
+    color: white;
+  }
+  
+  &.default {
+    background-color: #666;
+    color: white;
+  }
+}
+
+.prompt-preview {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0 0 16px;
+  height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.variables-container {
+  margin-top: 16px;
+}
+
+.variables-title {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0 0 8px;
+  font-weight: 400;
+}
+
+.variables-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.variable-tag {
+  font-size: 0.75rem;
+  background-color: var(--primary-dark);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.action-buttons {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 16px;
+}
+
+.execute-btn {
+  background-color: var(--primary-light);
+  color: var(--background-dark);
+  font-weight: 500;
+  position: absolute;
+  
+  mat-icon {
+    margin-right: 4px;
+  }
+}
+
+.secondary-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  
+  button {
+    margin-left: 4px;
+  }
+  
+  .delete-icon {
+    color: #ff5252;
+  }
+}
+
+// Add this method to the component class
+/* In your component.ts file, add:
+
+getModelClass(modelName: string): string {
+  const name = modelName.toLowerCase();
+  if (name.includes('gemini')) return 'gemini';
+  if (name.includes('gpt')) return 'gpt';
+  if (name.includes('claude')) return 'claude';
+  return 'default';
+}
+
+getPreviewText(template: string): string {
+  return template.length > 120 ? template.substring(0, 120) + '...' : template;
+}
+
+confirmDelete(prompt: PromptOut): void {
+  if (confirm(`Are you sure you want to delete "${prompt.name}"?`)) {
+    this.deletePrompt(prompt.id);
+  }
+}
+*/

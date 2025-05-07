@@ -1,52 +1,105 @@
-<ng-container *ngIf="loading; else loaded">
-  <p class="center-text">Loading prompts…</p>
-</ng-container>
+<div class="dashboard-wrapper">
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Prompt Library</h1>
+    <button
+      mat-flat-button
+      color="primary"
+      routerLink="/prompts/new"
+      class="new-prompt-btn"
+    >
+      <mat-icon>add_circle</mat-icon>
+      Create New Prompt
+    </button>
+  </div>
 
-<ng-template #loaded>
-  <ng-container *ngIf="error; else withData">
-    <p class="center-text error">{{ error }}</p>
-  </ng-container>
-  <ng-template #withData>
-    <ng-container *ngIf="prompts.length > 0; else empty">
-      <div class="dashboard-container">
-        <mat-card *ngFor="let p of prompts" class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>{{ p.name }}</mat-card-title>
-            <mat-card-subtitle>{{ p.ia_model }}</mat-card-subtitle>
-          </mat-card-header>
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40" color="accent"></mat-spinner>
+    <p>Loading your prompts...</p>
+  </div>
 
-          <mat-card-content>
-            <div class="badges">
-              <span class="badge" *ngFor="let v of p.variables">
-                {{ v }}
-              </span>
+  <div *ngIf="error" class="error-container">
+    <mat-icon class="error-icon">error</mat-icon>
+    <p class="error-message">{{ error }}</p>
+    <button mat-stroked-button color="primary" (click)="loadPrompts()">
+      Retry
+    </button>
+  </div>
+
+  <div *ngIf="!loading && !error" class="dashboard-content">
+    <div *ngIf="prompts.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">smart_toy</mat-icon>
+      <h2>No prompts yet</h2>
+      <p>Create your first prompt to start using AI models</p>
+      <button mat-flat-button color="accent" routerLink="/prompts/new">
+        <mat-icon>add</mat-icon>
+        Create First Prompt
+      </button>
+    </div>
+
+    <div *ngIf="prompts.length > 0" class="dashboard-grid">
+      <mat-card
+        *ngFor="let prompt of prompts"
+        class="prompt-card"
+        [class.highlight]="prompt.ia_model.toLowerCase().includes('gpt')"
+      >
+        <div class="card-header">
+          <h2 class="prompt-name">{{ prompt.name }}</h2>
+          <div class="model-badge" [ngClass]="getModelClass(prompt.ia_model)">
+            {{ prompt.ia_model }}
+          </div>
+        </div>
+
+        <mat-card-content>
+          <p class="prompt-preview">{{ getPreviewText(prompt.template) }}</p>
+
+          <div class="variables-container" *ngIf="prompt.variables.length > 0">
+            <h3 class="variables-title">Variables</h3>
+            <div class="variables-list">
+              <span
+                class="variable-tag"
+                *ngFor="let variable of prompt.variables"
+                >{{ variable }}</span
+              >
             </div>
-          </mat-card-content>
+          </div>
+        </mat-card-content>
 
-          <mat-card-actions>
-            <button mat-flat-button color="primary" (click)="executePrompt(p.id)">
+        <mat-card-actions>
+          <div class="action-buttons">
+            <button
+              mat-flat-button
+              class="execute-btn"
+              (click)="executePrompt(prompt.id)"
+            >
               <mat-icon>play_arrow</mat-icon>
               Execute
             </button>
-            <button mat-stroked-button color="accent" (click)="viewMetrics(p.id)">
-              <mat-icon>bar_chart</mat-icon>
-              Metrics
-            </button>
-            <button mat-flat-button class="edit-btn" (click)="editPrompt(p.id)">
-              <mat-icon>edit</mat-icon>
-              Edit
-            </button>
-            <button mat-stroked-button class="delete-btn" (click)="deletePrompt(p.id)">
-              <mat-icon>delete</mat-icon>
-              Delete
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-    </ng-container>
-
-    <ng-template #empty>
-      <p class="center-text">No prompts yet. Create your first prompt!</p>
-    </ng-template>
-  </ng-template>
-</ng-template>
+            <div class="secondary-actions">
+              <button
+                mat-icon-button
+                matTooltip="Edit Prompt"
+                (click)="editPrompt(prompt.id)"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="View Analytics"
+                (click)="viewMetrics(prompt.id)"
+              >
+                <mat-icon>insights</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Delete Prompt"
+                (click)="confirmDelete(prompt)"
+              >
+                <mat-icon class="delete-icon">delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,108 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles with green palette */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+    --primary-color: #2e7d32; /* Dark green */
+    --primary-light: #4caf50; /* Medium green */
+    --primary-lighter: #8bc34a; /* Light green */
+    --primary-dark: #1b5e20; /* Very dark green */
+    --accent-color: #00c853; /* Bright green */
+    --text-on-primary: #ffffff;
+    --background-dark: #121212;
+    --background-card: #1e1e1e;
+    --background-input: #2a2a2a;
+    --text-primary: #ffffff;
+    --text-secondary: #bbbbbb;
+    --error-color: #f44336;
+    --success-color: #00e676;
+  }
+  
+  html, body { 
+    height: 100%;
+    margin: 0;
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+  }
+  
+  /* Angular Material customizations */
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-unelevated-button.mat-primary,
+  .mat-mdc-fab.mat-primary {
+    background-color: var(--primary-color) !important;
+  }
+  
+  .mat-mdc-button.mat-primary, 
+  .mat-mdc-outlined-button.mat-primary {
+    color: var(--primary-light) !important;
+  }
+  
+  .mat-toolbar.mat-primary {
+    background: var(--primary-dark) !important;
+    color: var(--text-on-primary);
+  }
+  
+  /* Card styles */
+  .mat-mdc-card {
+    background-color: var(--background-card) !important;
+    color: var(--text-primary) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+  }
+  
+  /* Form field styles */
+  .mat-mdc-form-field {
+    width: 100%;
+  }
+  
+  .mat-mdc-form-field-appearance-fill .mat-mdc-form-field-flex {
+    background-color: var(--background-input) !important;
+  }
+  
+  /* Common utility classes */
+  .spacer {
+    flex: 1 1 auto;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .center-text {
+    text-align: center;
+  }
+  
+  .success-badge {
+    background-color: var(--success-color);
+    color: var(--background-dark);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  
+  .error-badge {
+    background-color: var(--error-color);
+    color: var(--text-on-primary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  
+  /* Button styling */
+  .action-button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    &.primary {
+      background-color: var(--primary-color);
+      color: var(--text-on-primary);
+    }
+    
+    &.accent {
+      background-color: var(--accent-color);
+      color: var(--background-dark);
+    }
+  }

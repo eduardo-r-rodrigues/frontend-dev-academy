@@ -1,77 +1,170 @@
-<div class="prompt-editor-container">
+<div class="editor-container">
   <div class="editor-header">
-    <h2>
-      {{ isEditMode ? 'Edit Prompt' : 'New Prompt' }}
-    </h2>
-    <button mat-flat-button color="primary" (click)="onSubmit()">
-      <mat-icon>save</mat-icon>
-      {{ isEditMode ? 'Update Prompt' : 'Save Prompt' }}
+    <div class="header-left">
+      <button
+        mat-icon-button
+        matTooltip="Back to Dashboard"
+        routerLink="/dashboard"
+        class="back-btn"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 class="editor-title">
+        {{ isEditMode ? "Edit Prompt" : "Create New Prompt" }}
+      </h1>
+    </div>
+
+    <button
+      mat-flat-button
+      color="accent"
+      (click)="onSubmit()"
+      [disabled]="form.invalid"
+    >
+      <mat-icon>{{ isEditMode ? "update" : "save" }}</mat-icon>
+      {{ isEditMode ? "Update Prompt" : "Save Prompt" }}
     </button>
   </div>
 
   <div class="editor-content">
+    <!-- Left panel - Main form -->
     <mat-card class="editor-card main-form">
+      <mat-card-header>
+        <mat-card-title>Prompt Details</mat-card-title>
+      </mat-card-header>
+
       <mat-card-content>
         <form [formGroup]="form">
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field class="full-width">
             <mat-label>Prompt Name</mat-label>
             <input
               matInput
               formControlName="name"
               placeholder="Enter a descriptive name"
             />
+            <mat-error *ngIf="form.get('name')?.hasError('required')">
+              Prompt name is required
+            </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
+          <!-- Replacing mat-select with the new IA Models container -->
+          <div class="ia-models-container">
+            <label class="section-title">IA Model</label>
+            <div class="models-grid">
+              <div
+                class="model-card"
+                *ngFor="let model of availableModels"
+                (click)="form.get('ia_model')?.setValue(model)"
+                [class.selected]="form.get('ia_model')?.value === model"
+              >
+                {{ model }}
+              </div>
+            </div>
+          </div>
+
+          <mat-form-field class="full-width">
             <mat-label>Prompt Template</mat-label>
             <textarea
               matInput
               formControlName="template"
-              rows="8"
-              placeholder="Write your prompt template..."
+              rows="10"
+              placeholder="Write your prompt template here..."
             ></textarea>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>AI Model</mat-label>
-            <mat-select formControlName="ia_model">
-              <mat-option *ngFor="let m of availableModels" [value]="m">
-                {{ m }}
-              </mat-option>
-            </mat-select>
+            <mat-hint align="end"
+              >Use {{ "{variable_name}" }} syntax for dynamic
+              variables</mat-hint
+            >
+            <mat-error *ngIf="form.get('template')?.hasError('required')">
+              Prompt template is required
+            </mat-error>
           </mat-form-field>
         </form>
       </mat-card-content>
     </mat-card>
 
+    <!-- Right panel - Variables -->
     <div class="side-panel">
-      <mat-card class="editor-card settings-card">
+      <mat-card class="editor-card variables-card">
         <mat-card-header>
           <mat-card-title>Variables</mat-card-title>
+          <mat-card-subtitle
+            >Define variables to use in your template</mat-card-subtitle
+          >
         </mat-card-header>
+
         <mat-card-content>
           <div class="variables-input">
-            <mat-form-field appearance="outline" class="variable-field">
-              <mat-label>Add a variable</mat-label>
+            <mat-form-field class="full-width">
+              <mat-label>Add a Variable</mat-label>
               <input
                 matInput
                 [(ngModel)]="newVariable"
-                placeholder="New variable"
+                placeholder="New variable name"
                 (keyup.enter)="addVariable()"
               />
+              <mat-hint>Press Enter to add</mat-hint>
+              <button
+                mat-icon-button
+                matSuffix
+                color="primary"
+                (click)="addVariable()"
+                [disabled]="!newVariable.trim()"
+                matTooltip="Add variable"
+              >
+                <mat-icon>add_circle</mat-icon>
+              </button>
             </mat-form-field>
-            <button mat-icon-button color="primary" (click)="addVariable()">
-              <mat-icon>add</mat-icon>
-            </button>
           </div>
 
-          <div class="variables-list">
-            <span class="variable" *ngFor="let v of variables">
-              {{ v }}
-              <button class="remove" (click)="removeVariable(v)">
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </span>
+          <div class="variables-list" *ngIf="variables.length > 0">
+            <h3 class="section-title">Current Variables</h3>
+            <div class="variables-container">
+              <div class="variable-chip" *ngFor="let variable of variables">
+                <span class="variable-name">{{ variable }}</span>
+                <button
+                  mat-icon-button
+                  (click)="removeVariable(variable)"
+                  matTooltip="Remove variable"
+                >
+                  <mat-icon class="remove-icon">close</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="variables-empty" *ngIf="variables.length === 0">
+            <p>
+              No variables added yet. Variables allow you to make your prompt
+              dynamic.
+            </p>
+            <p class="example">
+              Example: "Write a story about {{ "{topic}" }} in the style of
+              {{ "{author}" }}".
+            </p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="editor-card help-card">
+        <mat-card-header>
+          <mat-card-title>Template Help</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="help-content">
+            <h3 class="section-title">How to use variables</h3>
+            <p>
+              In your prompt template, use curly braces to insert variables:
+            </p>
+            <pre class="code-example">
+Write a poem about {{ "{subject}" }} in {{ "{style}" }} style.</pre
+            >
+
+            <h3 class="section-title">Tips</h3>
+            <ul class="tips-list">
+              <li>Be specific with your instructions</li>
+              <li>Include context for better results</li>
+              <li>Define the output format clearly</li>
+              <li>Use variables for content that changes</li>
+            </ul>
           </div>
         </mat-card-content>
       </mat-card>
